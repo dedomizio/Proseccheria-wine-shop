@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { ShoppingCart, CheckCircle, Trash2, Upload } from "lucide-react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -43,7 +41,7 @@ export default function WineShop() {
         <h1 className="text-3xl font-bold mb-4">Shop - Proseccheria</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {wines.map((wine) => (
-            <Card key={wine.id} className="p-4 shadow-lg">
+            <div key={wine.id} className="p-4 shadow-lg border rounded-lg">
               {wine.image ? (
                 <>
                   <img src={wine.image} alt={wine.name} className="w-full h-48 object-cover mb-2 rounded-xl" />
@@ -56,15 +54,15 @@ export default function WineShop() {
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, wine.id)} />
                 </label>
               )}
-              <CardContent>
+              <div>
                 <h2 className="text-xl font-semibold">{wine.name}</h2>
                 <p className="text-sm text-gray-600">{wine.description}</p>
                 <p className="text-lg font-bold">€{wine.price}</p>
-                <Button onClick={() => addToCart(wine)} className="mt-2 w-full flex items-center">
+                <button onClick={() => addToCart(wine)} className="mt-2 w-full flex items-center bg-blue-500 text-white p-2 rounded-lg">
                   <ShoppingCart className="mr-2" size={16} /> Aggiungi al carrello
-                </Button>
-              </CardContent>
-            </Card>
+                </button>
+              </div>
+            </div>
           ))}
         </div>
         <div className="mt-6 p-4 bg-gray-100 rounded-lg">
@@ -75,9 +73,9 @@ export default function WineShop() {
                 {cart.map((item, index) => (
                   <li key={index} className="flex justify-between border-b py-2 items-center">
                     {item.name} - €{item.price}
-                    <Button variant="outline" size="icon" onClick={() => removeFromCart(index)}>
+                    <button onClick={() => removeFromCart(index)} className="ml-4 bg-red-500 text-white p-1 rounded-lg">
                       <Trash2 size={16} />
-                    </Button>
+                    </button>
                   </li>
                 ))}
               </ul>

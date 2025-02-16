@@ -1,15 +1,10 @@
-import { useState } from "react";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useCart } from "../cartContext";
 
 export default function Cart() {
-  const [cart, setCart] = useState([]);
-
-  const removeFromCart = (index) => {
-    setCart(cart.filter((_, i) => i !== index));
-  };
-
+  const { cart, removeFromCart } = useCart();
   const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
@@ -40,7 +35,6 @@ export default function Cart() {
                 onApprove={(data, actions) => {
                   return actions.order.capture().then(() => {
                     alert("Pagamento completato!");
-                    setCart([]);
                   });
                 }}
               />

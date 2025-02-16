@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Star, Search, ShoppingCart, Sun, Moon, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { ShoppingCart, Search, Sun, Moon } from "lucide-react";
 
 export default function Shop() {
   const [cart, setCart] = useState([]);
@@ -19,12 +18,7 @@ export default function Shop() {
   };
 
   return (
-    <motion.div 
-      className={darkMode ? "dark bg-gray-900 text-white p-6" : "bg-gray-100 text-gray-900 p-6"} 
-      initial={{ opacity: 0, y: -20 }} 
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className={darkMode ? "dark bg-gray-900 text-white p-6" : "bg-gray-100 text-gray-900 p-6"}>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">Negozio</h1>
         <button onClick={() => setDarkMode(!darkMode)} className="p-2 bg-gray-200 dark:bg-gray-700 rounded">
@@ -63,6 +57,7 @@ export default function Shop() {
       <Link href="/cart">
         <button className="mt-6 bg-green-500 text-white p-3 rounded-lg">Vai al carrello</button>
       </Link>
-    </motion.div>
+    </div>
   );
 }
+

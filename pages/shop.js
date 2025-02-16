@@ -1,24 +1,36 @@
-import { useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Search } from "lucide-react";
-
-const wines = [
-  { id: 1, name: "Prosecco DOCG", price: 18, description: "Un ottimo prosecco dal sapore fruttato." },
-  { id: 2, name: "Amarone della Valpolicella", price: 45, description: "Vino corposo con note di ciliegia e spezie." },
-  { id: 3, name: "Chianti Classico", price: 22, description: "Equilibrato, con tannini morbidi e profumo intenso." },
-];
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Star, Search, ShoppingCart, Sun, Moon, Trash2 } from "lucide-react";
 
 export default function Shop() {
   const [cart, setCart] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+
+  const wines = [
+    { id: 1, name: "Prosecco DOCG", price: 18, description: "Un ottimo prosecco dal sapore fruttato." },
+    { id: 2, name: "Amarone della Valpolicella", price: 45, description: "Vino corposo con note di ciliegia e spezie." },
+    { id: 3, name: "Chianti Classico", price: 22, description: "Equilibrato, con tannini morbidi e profumo intenso." },
+  ];
 
   const addToCart = (wine) => {
     setCart([...cart, wine]);
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-4">Negozio - Selezione di Vini</h1>
+    <motion.div 
+      className={darkMode ? "dark bg-gray-900 text-white p-6" : "bg-gray-100 text-gray-900 p-6"} 
+      initial={{ opacity: 0, y: -20 }} 
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Negozio</h1>
+        <button onClick={() => setDarkMode(!darkMode)} className="p-2 bg-gray-200 dark:bg-gray-700 rounded">
+          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+      </div>
 
       <div className="flex mb-4">
         <Search size={24} className="mr-2" />
@@ -51,6 +63,6 @@ export default function Shop() {
       <Link href="/cart">
         <button className="mt-6 bg-green-500 text-white p-3 rounded-lg">Vai al carrello</button>
       </Link>
-    </div>
+    </motion.div>
   );
 }

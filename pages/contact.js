@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Search } from "lucide-react";
+import { Star, Search, ShoppingCart, Sun, Moon } from "lucide-react";
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -11,6 +11,8 @@ export default function Contact() {
     { name: "Laura", rating: 4, comment: "Ottima selezione di vini!" },
   ]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [cart, setCart] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,14 +23,23 @@ export default function Contact() {
     setSubmitted(true);
   };
 
+  const addToCart = (wine) => {
+    setCart([...cart, wine]);
+  };
+
   return (
     <motion.div 
-      className="p-6" 
+      className={darkMode ? "dark bg-gray-900 text-white p-6" : "bg-gray-100 text-gray-900 p-6"} 
       initial={{ opacity: 0, y: -20 }} 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="text-3xl font-bold mb-4">Contatti</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Contatti</h1>
+        <button onClick={() => setDarkMode(!darkMode)} className="p-2 bg-gray-200 dark:bg-gray-700 rounded">
+          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+      </div>
       <p className="text-lg">Vuoi metterti in contatto con noi? Ecco come puoi farlo:</p>
       <ul className="mt-4">
         <li><strong>Email:</strong> info@proseccheria.com</li>

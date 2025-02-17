@@ -24,21 +24,7 @@ export default function Cart() {
               ))}
             </ul>
             <p className="text-lg font-bold mt-4">Totale: €{totalAmount}</p>
-            <div className="mt-4">
-              <PayPalButtons
-                style={{ layout: "horizontal" }}
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [{ amount: { value: totalAmount.toFixed(2) } }],
-                  });
-                }}
-                onApprove={(data, actions) => {
-                  return actions.order.capture().then(() => {
-                    alert("Pagamento completato!");
-                  });
-                }}
-              />
-            </div>
+            <PayPalButtons style={{ layout: "horizontal" }} />
           </>
         ) : (
           <p className="text-gray-500">Il carrello è vuoto</p>

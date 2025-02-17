@@ -13,11 +13,19 @@ export default function Shop() {
     const savedMode = localStorage.getItem("darkMode");
     if (savedMode === "true") {
       setDarkMode(true);
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode);
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [darkMode]);
 
   const wines = [
@@ -27,10 +35,13 @@ export default function Shop() {
   ];
 
   return (
-    <div className={darkMode ? "dark bg-gray-900 text-white p-6" : "bg-gray-100 text-gray-900 p-6"}>
+    <div className={`p-6 min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">Negozio</h1>
-        <button onClick={() => setDarkMode(!darkMode)} className="p-2 bg-gray-200 dark:bg-gray-700 rounded">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2 bg-gray-200 dark:bg-gray-700 rounded"
+        >
           {darkMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
       </div>

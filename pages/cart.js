@@ -3,16 +3,43 @@ import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useCart } from "../cartContext";
-import StripeCheckout from "react-stripe-checkout";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("pk_test_12345"); // ⚠️ Usa la tua chiave Stripe
+
+function CheckoutForm({ totalAmount }) {
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!stripe || !elements) return;
+
+    const card = elements.getElement(CardElement);
+    const { token, error } = await stripe.createToken(card);
+
+    if (error) {
+      alert(error.message);
+    } else {
+      alert("Pagamento con carta completato! Token: " + token.id);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-4 border p-4 rounded-lg">
+      <CardElement className="p-2 border rounded" />
+      <button type="submit" className="mt-4 bg-blue-500 text-white p-3 rounded-lg" disabled={!stripe}>
+        Paga con Carta
+      </button>
+    </form>
+  );
+}
 
 export default function Cart() {
   const { cart, removeFromCart } = useCart();
   const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
   const [paymentMethod, setPaymentMethod] = useState("paypal");
-
-  const handleStripePayment = (token) => {
-    alert("Pagamento con carta completato! Token: " + token.id);
-  };
 
   return (
     <PayPalScriptProvider options={{ "client-id": "test" }}>
@@ -62,12 +89,9 @@ export default function Cart() {
                 />
               )}
               {paymentMethod === "card" && (
-                <StripeCheckout
-                  stripeKey="pk_test_12345" // ⚠️ Usa la tua chiave Stripe
-                  amount={totalAmount * 100}
-                  currency="EUR"
-                  token={handleStripePayment}
-                />
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm totalAmount={totalAmount} />
+                </Elements>
               )}
               {paymentMethod === "store" && (
                 <button onClick={() => alert("Ordine confermato per il ritiro in negozio!")} className="mt-4 bg-green-500 text-white p-3 rounded-lg">

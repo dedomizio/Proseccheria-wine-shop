@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ShoppingCart, Search, Sun, Moon } from "lucide-react";
+import { useCart } from "../cartContext";
 
 export default function Shop() {
-  const [cart, setCart] = useState([]);
+  const { addToCart } = useCart();
   const [searchTerm, setSearchTerm] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+
+  // ✅ Salviamo la modalità notte nel localStorage
+  useEffect(() => {
+    const savedMode = localStorage.getItem("darkMode");
+    if (savedMode === "true") {
+      setDarkMode(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
 
   const wines = [
     { id: 1, name: "Prosecco DOCG", price: 18, description: "Un ottimo prosecco dal sapore fruttato." },
     { id: 2, name: "Amarone della Valpolicella", price: 45, description: "Vino corposo con note di ciliegia e spezie." },
     { id: 3, name: "Chianti Classico", price: 22, description: "Equilibrato, con tannini morbidi e profumo intenso." },
   ];
-
-  const addToCart = (wine) => {
-    setCart([...cart, wine]);
-  };
 
   return (
     <div className={darkMode ? "dark bg-gray-900 text-white p-6" : "bg-gray-100 text-gray-900 p-6"}>
@@ -60,4 +69,3 @@ export default function Shop() {
     </div>
   );
 }
-
